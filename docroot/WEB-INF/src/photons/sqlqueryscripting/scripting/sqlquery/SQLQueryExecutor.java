@@ -60,7 +60,7 @@ public class SQLQueryExecutor implements ScriptingExecutor {
 	@Override 
 	public Map<String, Object> eval(
 			Set<String> allowedClasses, Map<String, Object> inputObjects,
-			Set<String> outputNames, File script)
+			Set<String> outputNames, File script, ClassLoader... classLoaders)
 		throws ScriptingException {
 		try {
 			return eval(allowedClasses, inputObjects, outputNames, FileUtil.read(script));
@@ -73,7 +73,7 @@ public class SQLQueryExecutor implements ScriptingExecutor {
 	@Override
 	public Map<String, Object> eval(
 		Set<String> allowedClasses, Map<String, Object> inputObjects,
-		Set<String> outputNames, String script)
+		Set<String> outputNames, String script, ClassLoader... classLoaders)
 		throws ScriptingException {
 
 		if (allowedClasses != null) {
@@ -211,9 +211,10 @@ public class SQLQueryExecutor implements ScriptingExecutor {
 			for (Iterator<?> iterator = line.iterator(); iterator.hasNext();) {
 				Object value = (Object) iterator.next();
 				if (value != null) {
-					out.append(value.toString());
+					
+					out.append("\"" + value.toString().replaceAll("\"", "\"\"") + "\"");
 				} else {
-					out.append("null");
+					out.append("\"null\"");
 				}
 				if (iterator.hasNext()) {
 					out.append(',');
