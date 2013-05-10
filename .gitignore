@@ -1,0 +1,7 @@
+/.project
+/.settings
+/.classpath
+/docroot/META-INF
+/docroot\WEB-INF/classes
+/docroot\WEB-INF\lib/portal-compat-client.jar
+/docroot\WEB-INF/classes
