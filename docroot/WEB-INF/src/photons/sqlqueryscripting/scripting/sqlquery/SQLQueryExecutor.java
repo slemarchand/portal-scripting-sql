@@ -85,14 +85,14 @@ public class SQLQueryExecutor implements ScriptingExecutor {
 		
 		Map<String, String> hints = _getHints(script);
 
-		boolean emptyScript = script.replace("-- help", "").trim().length() == 0;
+		boolean emptyScript = script.replace("--help", "").trim().length() == 0;
 		
 		boolean help = _getHint("help", hints, null) != null;
 		
 		if(help || emptyScript) {
 			_displayHelp(out);
 		} else {
-			out.append("To learn more about execution parameters, add \"-- help\" line in your script or execute empty script\n\n");
+			out.append("To learn more about execution parameters, add \"--help\" line in your script or execute empty script\n\n");
 		}
 		
 		if(!emptyScript) {
@@ -147,8 +147,8 @@ public class SQLQueryExecutor implements ScriptingExecutor {
 			StringBuilder hintsStr = new StringBuilder();
 			for (String l : lines) {
 				l = l.trim();
-				if (l.startsWith("-- ")) {
-					hintsStr.append(l.substring(2) + LINE_SEPARATOR);
+				if (l.startsWith("--")) {
+					hintsStr.append(l.substring(2).trim() + LINE_SEPARATOR);
 				}
 			}
 
@@ -226,11 +226,11 @@ public class SQLQueryExecutor implements ScriptingExecutor {
 
 	private void _displayHelp(UnsyncPrintWriter out) {
 		out.append("Usage:\nTo set execution parameters, you can add some hint lines in your script, like these:\n");
-		out.append("\t-- help\t\t\tDisplay this help\n");
-		out.append("\t-- format=html\t\tFormat results in HTML (default format)\n");
-		out.append("\t-- format=csv\t\tFormat results in CSV\n");
-		out.append("\t-- maxRows=200\t\tLimit display to 200 first results (default limit is 50)\n");
-		out.append("You can combine several hints using multiple lines. Be carreful to the space after \"--\".\n\n");
+		out.append("\t--help\t\t\tDisplay this help\n");
+		out.append("\t--format=html\t\tFormat results in HTML (default format)\n");
+		out.append("\t--format=csv\t\tFormat results in CSV\n");
+		out.append("\t--maxRows=200\t\tLimit display to 200 first results (default limit is 50)\n");
+		out.append("You can combine several hints using multiple lines.\n\n");
 		out.append("Learn more about SQL Query Scripting Hook at <a href=\"http://photons-project.org/sqlqueryscripting\" target=\"_blank\">http://photons-project.org/sqlqueryscripting</a>.\n\n");
 	}
 	
