@@ -22,7 +22,10 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.scripting.Scripting;
 import com.liferay.portal.kernel.scripting.ScriptingException;
+import com.liferay.portal.kernel.scripting.ScriptingExecutor;
 import com.liferay.portal.kernel.scripting.ScriptingUtil;
+
+import java.lang.reflect.Method;
 
 /**
  * @author Sébastien Le Marchand
@@ -42,17 +45,31 @@ public class AppStartupAction extends SimpleAction {
 		}
 
 		Scripting scripting = ScriptingUtil.getScripting();
-
-		scripting.addScriptionExecutor(
-			SQLQueryExecutor.LANGUAGE, new SQLQueryExecutor());
-
 		try {
+		
+			addScriptionExecutor(scripting,
+					SQLQueryExecutor.LANGUAGE, new SQLQueryExecutor());
+
+		
 			scripting.clearCache(SQLQueryExecutor.LANGUAGE);
 		}
 		catch (ScriptingException e) {
 			throw new ActionException(e);
 		}
 
+	}
+
+	private void addScriptionExecutor(Scripting scripting, String language,
+			SQLQueryExecutor sqlQueryExecutor) throws ScriptingException {
+		
+		try {
+			Method method = scripting.getClass().getMethod(
+								"addScriptingExecutor",
+								String.class, ScriptingExecutor.class);
+			method.invoke(scripting, language, sqlQueryExecutor);
+		} catch(ReflectiveOperationException e) {
+			throw new ScriptingException(e);
+		}
 	}
 
 	private final static Log _log =
