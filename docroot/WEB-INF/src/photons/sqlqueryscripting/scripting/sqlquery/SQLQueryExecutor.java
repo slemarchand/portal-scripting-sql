@@ -14,6 +14,13 @@
 
 package photons.sqlqueryscripting.scripting.sqlquery;
 
+import com.liferay.portal.kernel.dao.jdbc.DataAccess;
+import com.liferay.portal.kernel.io.unsync.UnsyncPrintWriter;
+import com.liferay.portal.kernel.scripting.ExecutionException;
+import com.liferay.portal.kernel.scripting.ScriptingException;
+import com.liferay.portal.kernel.scripting.ScriptingExecutor;
+import com.liferay.portal.kernel.util.FileUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -32,13 +39,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
-
-import com.liferay.portal.kernel.dao.jdbc.DataAccess;
-import com.liferay.portal.kernel.io.unsync.UnsyncPrintWriter;
-import com.liferay.portal.kernel.scripting.ExecutionException;
-import com.liferay.portal.kernel.scripting.ScriptingException;
-import com.liferay.portal.kernel.scripting.ScriptingExecutor;
-import com.liferay.portal.kernel.util.FileUtil;
 
 /**
  * @author Sébastien Le Marchand
@@ -239,10 +239,10 @@ public class SQLQueryExecutor implements ScriptingExecutor {
 		UnsyncPrintWriter out) {
 
 		out.append("</pre>");
-		out.append("<div class=\"lfr-search-container \"><div class=\"results-grid\">");
-		out.append("<table class=\"taglib-search-iterator\">");
-		out.append("<thead>");
-		out.append("<tr class=\"portlet-section-header results-header\">");
+		out.append("<div class=\"component searchcontainer\"><div class=\"searchcontainer-content\">");
+		out.append("<table class=\"table table-bordered table-striped\">");
+		out.append("<thead class=\"table-columns\">");
+		out.append("<tr>");
 
 		for (String value : columnLabels) {
 			out.append("<th>");
@@ -252,15 +252,22 @@ public class SQLQueryExecutor implements ScriptingExecutor {
 
 		out.append("</tr>");
 		out.append("</thead>");
-		out.append("<tbody>");
+		out.append("<tbody class=\"table-data\">");
 
 		boolean alt = false;
 		for (List<?> line : rows) {
 			out.append("<tr class=\"portlet-section-alternate results-row " +
 				(alt ? "alt" : "") + "\">");
-			for (Iterator<?> iterator = line.iterator(); iterator.hasNext();) {
-				Object value = (Object) iterator.next();
-				out.append("<td>");
+			for (int i=0; i < line.size(); i++) {
+				Object value = (Object) line.get(i);
+				
+				out.append("<td class=\"table-cell");
+				if(i==0) {
+					out.append(" first");
+				} else if(i==line.size()) {
+					out.append(" last");
+				}
+				out.append("\">");
 				if (value != null) {
 					out.append(value.toString());
 				} else {
