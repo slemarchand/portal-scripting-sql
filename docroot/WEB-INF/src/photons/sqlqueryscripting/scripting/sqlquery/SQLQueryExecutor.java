@@ -231,7 +231,7 @@ public class SQLQueryExecutor implements ScriptingExecutor {
 		out.append("\t--format=csv\t\tFormat results in CSV\n");
 		out.append("\t--maxRows=200\t\tLimit display to 200 first results (default limit is 50)\n");
 		out.append("You can combine several hints using multiple lines.\n\n");
-		out.append("Learn more about SQL Query Scripting Hook at <a href=\"http://photons-project.org/sqlqueryscripting\" target=\"_blank\">http://photons-project.org/sqlqueryscripting</a>.\n\n");
+		out.append("Learn more about SQL Query Scripting Hook at <a href=\"https://github.com/slemarchand/sql-query-scripting-hook/wiki\" target=\"_blank\">https://github.com/slemarchand/sql-query-scripting-hook/wiki</a>.\n\n");
 	}
 	
 	private void _formatHTML(
