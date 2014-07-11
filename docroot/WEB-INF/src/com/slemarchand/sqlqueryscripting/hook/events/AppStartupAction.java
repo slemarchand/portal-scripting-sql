@@ -12,9 +12,7 @@
  * details.
  */
 
-package photons.sqlqueryscripting.hook.events;
-
-import photons.sqlqueryscripting.scripting.sqlquery.SQLQueryExecutor;
+package com.slemarchand.sqlqueryscripting.hook.events;
 
 import com.liferay.portal.kernel.events.ActionException;
 import com.liferay.portal.kernel.events.SimpleAction;
@@ -24,6 +22,7 @@ import com.liferay.portal.kernel.scripting.Scripting;
 import com.liferay.portal.kernel.scripting.ScriptingException;
 import com.liferay.portal.kernel.scripting.ScriptingExecutor;
 import com.liferay.portal.kernel.scripting.ScriptingUtil;
+import com.slemarchand.sqlqueryscripting.scripting.sqlquery.SQLQueryExecutor;
 
 import java.lang.reflect.Method;
 

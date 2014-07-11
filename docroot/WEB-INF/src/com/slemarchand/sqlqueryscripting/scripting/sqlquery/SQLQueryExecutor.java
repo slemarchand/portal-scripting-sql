@@ -12,7 +12,7 @@
  * details.
  */
 
-package photons.sqlqueryscripting.scripting.sqlquery;
+package com.slemarchand.sqlqueryscripting.scripting.sqlquery;
 
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.io.unsync.UnsyncPrintWriter;
