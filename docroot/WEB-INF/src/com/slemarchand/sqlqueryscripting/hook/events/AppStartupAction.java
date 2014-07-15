@@ -46,7 +46,7 @@ public class AppStartupAction extends SimpleAction {
 		Scripting scripting = ScriptingUtil.getScripting();
 		try {
 		
-			addScriptionExecutor(scripting,
+			addScriptingExecutor(scripting,
 					SQLQueryExecutor.LANGUAGE, new SQLQueryExecutor());
 
 		
@@ -58,7 +58,7 @@ public class AppStartupAction extends SimpleAction {
 
 	}
 
-	private void addScriptionExecutor(Scripting scripting, String language,
+	private void addScriptingExecutor(Scripting scripting, String language,
 			ScriptingExecutor scriptingExecutor) throws ScriptingException {
 		
 		try {
