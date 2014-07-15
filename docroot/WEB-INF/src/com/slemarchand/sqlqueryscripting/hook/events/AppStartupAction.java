@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012-2013 Sébastien Le Marchand, All rights reserved.
+ * Copyright (c) 2012-2014 Sébastien Le Marchand, All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -59,13 +59,13 @@ public class AppStartupAction extends SimpleAction {
 	}
 
 	private void addScriptionExecutor(Scripting scripting, String language,
-			SQLQueryExecutor sqlQueryExecutor) throws ScriptingException {
+			ScriptingExecutor scriptingExecutor) throws ScriptingException {
 		
 		try {
 			Method method = scripting.getClass().getMethod(
 								"addScriptingExecutor",
 								String.class, ScriptingExecutor.class);
-			method.invoke(scripting, language, sqlQueryExecutor);
+			method.invoke(scripting, language, scriptingExecutor);
 		} catch(ReflectiveOperationException e) {
 			throw new ScriptingException(e);
 		}
