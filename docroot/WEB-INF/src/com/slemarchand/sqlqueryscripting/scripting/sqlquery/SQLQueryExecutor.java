@@ -57,7 +57,6 @@ public class SQLQueryExecutor implements ScriptingExecutor {
 		return LANGUAGE;
 	}
 
-	@Override 
 	public Map<String, Object> eval(
 			Set<String> allowedClasses, Map<String, Object> inputObjects,
 			Set<String> outputNames, File script, ClassLoader... classLoaders)
@@ -70,7 +69,6 @@ public class SQLQueryExecutor implements ScriptingExecutor {
 		}
 	}
 	
-	@Override
 	public Map<String, Object> eval(
 		Set<String> allowedClasses, Map<String, Object> inputObjects,
 		Set<String> outputNames, String script, ClassLoader... classLoaders)

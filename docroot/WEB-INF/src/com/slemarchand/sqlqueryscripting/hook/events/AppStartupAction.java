@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.scripting.ScriptingExecutor;
 import com.liferay.portal.kernel.scripting.ScriptingUtil;
 import com.slemarchand.sqlqueryscripting.scripting.sqlquery.SQLQueryExecutor;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -61,14 +62,26 @@ public class AppStartupAction extends SimpleAction {
 	private void addScriptingExecutor(Scripting scripting, String language,
 			ScriptingExecutor scriptingExecutor) throws ScriptingException {
 		
-		try {
-			Method method = scripting.getClass().getMethod(
-								"addScriptingExecutor",
-								String.class, ScriptingExecutor.class);
-			method.invoke(scripting, language, scriptingExecutor);
-		} catch(ReflectiveOperationException e) {
-			throw new ScriptingException(e);
-		}
+		
+			Method method;
+			try {
+				method = scripting.getClass().getMethod(
+									"addScriptingExecutor",
+									String.class, ScriptingExecutor.class);
+			} catch (SecurityException e) {
+				throw new ScriptingException(e);
+			} catch (NoSuchMethodException e) {
+				throw new ScriptingException(e);
+			}
+			try {
+				method.invoke(scripting, language, scriptingExecutor);
+			} catch (IllegalArgumentException e) {
+				throw new ScriptingException(e);
+			} catch (IllegalAccessException e) {
+				throw new ScriptingException(e);
+			} catch (InvocationTargetException e) {
+				throw new ScriptingException(e);
+			}		
 	}
 
 	private final static Log _log =
