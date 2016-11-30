@@ -1,4 +1,4 @@
-SQL Query Scripting Hook for Liferay
+SQL Scripting for Liferay
 ====================================
 
 Support for SQL queries in Liferay script console 
