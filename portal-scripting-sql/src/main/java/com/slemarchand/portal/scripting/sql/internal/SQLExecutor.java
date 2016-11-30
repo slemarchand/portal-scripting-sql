@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012-2014 Sébastien Le Marchand, All rights reserved.
+ * Copyright (c) 2012-present Sébastien Le Marchand, All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,14 +12,18 @@
  * details.
  */
 
-package com.slemarchand.sqlqueryscripting.scripting.sqlquery;
+package com.slemarchand.portal.scripting.sql.internal;
 
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.io.unsync.UnsyncPrintWriter;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.scripting.ExecutionException;
+import com.liferay.portal.kernel.scripting.ScriptingContainer;
 import com.liferay.portal.kernel.scripting.ScriptingException;
 import com.liferay.portal.kernel.scripting.ScriptingExecutor;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.scripting.BaseScriptingExecutor;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,40 +42,40 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Sébastien Le Marchand
  */
-public class SQLQueryExecutor implements ScriptingExecutor {
+@Component(
+	immediate = true,
+	property = {"scripting.language=" + SQLExecutor.LANGUAGE},
+	service = ScriptingExecutor.class
+)
+public class SQLExecutor extends BaseScriptingExecutor {
 
-	public static final String LANGUAGE = "sql-query";
+	public static final String LANGUAGE = "sql";
 
-	public void clearCache() {
-
-		// Nothing to do
-	}
-
-	public String getLanguage() {
-
-		return LANGUAGE;
-	}
-
-	public Map<String, Object> eval(
-			Set<String> allowedClasses, Map<String, Object> inputObjects,
-			Set<String> outputNames, File script, ClassLoader... classLoaders)
-		throws ScriptingException {
-		try {
-			return eval(allowedClasses, inputObjects, outputNames, FileUtil.read(script));
-		}
-		catch (IOException e) {
-			throw new ScriptingException(e);
+	public SQLExecutor() {
+		if (_log.isInfoEnabled()) {
+			_log.info("Adding scripting executor for database queries - https://github.com/slemarchand/portal-scripting-sql");
 		}
 	}
 	
+	@Override
+	public String getLanguage() {
+		return LANGUAGE;
+	}
+	
+	@Override
+	public ScriptingExecutor newInstance(boolean executeInSeparateThread) {
+		return new SQLExecutor();
+	}
+	
+	@Override
 	public Map<String, Object> eval(
 		Set<String> allowedClasses, Map<String, Object> inputObjects,
-		Set<String> outputNames, String script, ClassLoader... classLoaders)
+		Set<String> outputNames, String script)
 		throws ScriptingException {
 
 		if (allowedClasses != null) {
@@ -140,13 +144,13 @@ public class SQLQueryExecutor implements ScriptingExecutor {
 
 		try {
 
-			List<String> lines = IOUtils.readLines(new StringReader(sqlQuery));
+			String[] lines = sqlQuery.split("[\\n\\r]");
 
 			StringBuilder hintsStr = new StringBuilder();
 			for (String l : lines) {
 				l = l.trim();
 				if (l.startsWith("--")) {
-					hintsStr.append(l.substring(2).trim() + LINE_SEPARATOR);
+					hintsStr.append(l.substring(2).trim() + _LINE_SEPARATOR);
 				}
 			}
 
@@ -229,7 +233,7 @@ public class SQLQueryExecutor implements ScriptingExecutor {
 		out.append("\t--format=csv\t\tFormat results in CSV\n");
 		out.append("\t--maxRows=200\t\tLimit display to 200 first results (default limit is 50)\n");
 		out.append("You can combine several hints using multiple lines.\n\n");
-		out.append("Learn more about SQL Query Scripting Hook at <a href=\"https://github.com/slemarchand/sql-query-scripting-hook/wiki\" target=\"_blank\">https://github.com/slemarchand/sql-query-scripting-hook/wiki</a>.\n\n");
+		out.append("Learn more about SQL Query Scripting Hook at <a href=\"https://github.com/slemarchand/portal-scripting-sql/wiki\" target=\"_blank\">https://github.com/slemarchand/portal-scripting-sql/wiki</a>.\n\n");
 	}
 	
 	private void _formatHTML(
@@ -331,7 +335,8 @@ public class SQLQueryExecutor implements ScriptingExecutor {
 
 		return rows;
 	}
+	
+	private static final String _LINE_SEPARATOR = System.getProperty("line.separator");
 
-	private static String LINE_SEPARATOR = System.getProperty("line.separator");
-
+	private static Log _log = LogFactoryUtil.getLog(SQLExecutor.class);
 }

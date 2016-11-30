@@ -1,0 +1,12 @@
+Liferay-Releng-App-Description:
+Liferay-Releng-App-Title: SQL Query Scripting
+Liferay-Releng-Bundle: true
+Liferay-Releng-Category: Utility
+Liferay-Releng-Demo-Url:
+Liferay-Releng-Deprecated: false
+Liferay-Releng-Labs: true
+Liferay-Releng-Marketplace: true
+Liferay-Releng-Public: true
+Liferay-Releng-Restart-Required: false
+Liferay-Releng-Support-Url: https://github.com/slemarchand/portal-scripting-sql/issues
+Liferay-Releng-Supported: false
